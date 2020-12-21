@@ -1,0 +1,30 @@
+#!/bin/ash
+NAT=false
+#TODO: self upgrade
+until $NAT
+do
+echo "check"
+IP=$(ip addr show pppoe-wan | grep -o 'inet [0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+' | grep -o [0-9].*)
+icanhazip=`wget -q -4 -O- http://icanhazip.com`
+echo $IP
+echo $icanhazip
+if [ "$IP" == "$icanhazip" ] ; then
+echo "Not NAT"
+echo 1 > /sys/devices/platform/gpio-leds/leds/c20-v1:blue:wan/brightness
+echo 0 > /sys/devices/platform/gpio-leds/leds/c20-v1:orange:wan/brightness
+NAT=true
+else
+echo "Is NAT"
+echo 0 > /sys/devices/platform/gpio-leds/leds/c20-v1:blue:wan/brightness
+echo 1 > /sys/devices/platform/gpio-leds/leds/c20-v1:orange:wan/brightness
+#reboot pppoe
+echo "pppoe-wan restarting"
+`/sbin/ifdown -a "pppoe-wan"`
+`/sbin/ifup -a "pppoe-wan"`
+echo "wan restart done"
+echo "sleep"
+sleep 15
+fi
+done
+echo "Done"
+echo "Keep calm and enjoy"
