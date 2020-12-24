@@ -10,13 +10,13 @@ echo $IP
 echo $icanhazip
 if [ "$IP" == "$icanhazip" ] ; then
 echo "Not NAT"
-echo 1 > /sys/devices/platform/gpio-leds/leds/c20-v1:blue:wan/brightness
-echo 0 > /sys/devices/platform/gpio-leds/leds/c20-v1:orange:wan/brightness
+echo 1 > /sys/devices/platform/leds/leds/c20-v1:blue:wan/brightness
+echo 0 > /sys/devices/platform/leds/leds/c20-v1:orange:wan/brightness
 NAT=true
 else
 echo "Is NAT"
-echo 0 > /sys/devices/platform/gpio-leds/leds/c20-v1:blue:wan/brightness
-echo 1 > /sys/devices/platform/gpio-leds/leds/c20-v1:orange:wan/brightness
+echo 0 > /sys/devices/platform/leds/leds/c20-v1:blue:wan/brightness
+echo 1 > /sys/devices/platform/leds/leds/c20-v1:orange:wan/brightness
 #reboot pppoe
 echo "pppoe-wan restarting"
 `/sbin/ifdown -a "pppoe-wan"`
